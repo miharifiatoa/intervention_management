@@ -1,0 +1,73 @@
+<!-- VIEWS/ADMIN/NOUVELLE-INTERVENTION.EJS -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Nouvelle Intervention</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/admin/interventions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="titre" class="form-label">Titre *</label>
+                                <input type="text" class="form-control" id="titre" name="titre" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="client_id" class="form-label">Client *</label>
+                                <select class="form-select" id="client_id" name="client_id" required>
+                                    <option value="">Sélectionner un client</option>
+                                    <% clients.forEach(client => { %>
+                                        <option value="<%= client.id %>"><%= client.nom %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description *</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="priorite" class="form-label">Priorité</label>
+                                <select class="form-select" id="priorite" name="priorite">
+                                    <option value="basse">Basse</option>
+                                    <option value="normale" selected>Normale</option>
+                                    <option value="haute">Haute</option>
+                                    <option value="urgente">Urgente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="technicien_id" class="form-label">Technicien (optionnel)</label>
+                                <select class="form-select" id="technicien_id" name="technicien_id">
+                                    <option value="">Assigner plus tard</option>
+                                    <% techniciens.forEach(technicien => { %>
+                                        <option value="<%= technicien.id %>"><%= technicien.nom %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="date_prevue" class="form-label">Date prévue</label>
+                        <input type="datetime-local" class="form-control" id="date_prevue" name="date_prevue">
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Créer l'intervention</button>
+                        <a href="/admin/interventions" class="btn btn-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

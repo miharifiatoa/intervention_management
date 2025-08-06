@@ -1,0 +1,244 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3><i class="fas fa-tools me-2"></i>Gestion des Interventions</h3>
+        <a href="/admin/interventions/nouvelle" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Nouvelle Intervention
+        </a>
+    </div>
+
+    <!-- Filtres -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-light">
+            <h6 class="mb-0"><i class="fas fa-filter me-2"></i>Filtres</h6>
+        </div>
+        <div class="card-body">
+            <form class="row g-3" id="filterForm">
+                <div class="col-lg-3 col-md-6">
+                    <label for="statusFilter" class="form-label">Statut</label>
+                    <select class="form-select" id="statusFilter" name="status">
+                        <option value="">Tous les statuts</option>
+                        <option value="en_attente">En attente</option>
+                        <option value="en_cours">En cours</option>
+                        <option value="terminee">Terminée</option>
+                        <option value="annulee">Annulée</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <label for="prioriteFilter" class="form-label">Priorité</label>
+                    <select class="form-select" id="prioriteFilter" name="priorite">
+                        <option value="">Toutes les priorités</option>
+                        <option value="basse">Basse</option>
+                        <option value="normale">Normale</option>
+                        <option value="haute">Haute</option>
+                        <option value="urgente">Urgente</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <label for="technicienFilter" class="form-label">Technicien</label>
+                    <select class="form-select" id="technicienFilter">
+                        <option value="">Tous les techniciens</option>
+                        <option value="non_assigne">Non assigné</option>
+                        <% if (typeof techniciens !== 'undefined') { %>
+                            <% techniciens.forEach(technicien => { %>
+                                <option value="<%= technicien.nom %>"><%= technicien.nom %></option>
+                            <% }) %>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-secondary w-100" onclick="resetFilters()">
+                        <i class="fas fa-undo me-1"></i>Réinitialiser
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Interventions List -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <% if (interventions.length === 0) { %>
+                <div class="text-center py-5">
+                    <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                    <p class="text-muted fs-5">Aucune intervention enregistrée.</p>
+                    <a href="/admin/interventions/nouvelle" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i> Créer la première intervention
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 80px;">ID</th>
+                                <th>Titre</th>
+                                <th style="width: 150px;">Client</th>
+                                <th>Description</th>
+                                <th style="width: 130px;">Technicien</th>
+                                <th style="width: 100px;">Statut</th>
+                                <th style="width: 100px;">Priorité</th>
+                                <th style="width: 140px;">Date prévue</th>
+                                <th style="width: 200px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% interventions.forEach(intervention => { %>
+                                <tr>
+                                    <td><span class="badge bg-secondary">#<%= intervention.id %></span></td>
+                                    <td><strong><%= intervention.titre %></strong></td>
+                                    <td><%= intervention.client ? intervention.client.nom : '<span class="text-muted">N/A</span>' %></td>
+                                    <td class="text-truncate" style="max-width: 200px;" title="<%= intervention.description %>">
+                                        <%= intervention.description.substring(0, 50) %>...
+                                    </td>
+                                    <td>
+                                        <% if (intervention.technicien) { %>
+                                            <span class="badge bg-light text-dark"><%= intervention.technicien.nom %></span>
+                                        <% } else { %>
+                                            <span class="badge bg-warning text-dark">Non assigné</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% let statusClass = intervention.status === 'en_attente' ? 'warning' : 
+                                                        intervention.status === 'en_cours' ? 'info' : 
+                                                        intervention.status === 'terminee' ? 'success' : 'secondary' %>
+                                        <span class="badge bg-<%= statusClass %> status-badge">
+                                            <%= intervention.status.replace('_', ' ').toUpperCase() %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% let priorityClass = intervention.priorite === 'urgente' ? 'danger' : 
+                                                            intervention.priorite === 'haute' ? 'warning' : 
+                                                            intervention.priorite === 'normale' ? 'info' : 'secondary' %>
+                                        <span class="badge bg-<%= priorityClass %> priority-<%= intervention.priorite %>">
+                                            <%= intervention.priorite.toUpperCase() %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (intervention.date_prevue) { %>
+                                            <small><%= new Date(intervention.date_prevue).toLocaleString('fr-FR') %></small>
+                                        <% } else { %>
+                                            <span class="text-muted">Non définie</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="/admin/interventions/<%= intervention.id %>" class="btn btn-outline-info" title="Voir détails">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <% if (!intervention.technicien_id) { %>
+                                                <button class="btn btn-outline-primary" data-bs-toggle="modal" 
+                                                        data-bs-target="#assignModal<%= intervention.id %>" title="Assigner technicien">
+                                                    <i class="fas fa-user-plus"></i>
+                                                </button>
+                                            <% } %>
+                                            <% if (intervention && intervention.status && intervention.status !== 'terminee' && intervention.status !== 'annulee') { %>
+                                                <button class="btn btn-outline-danger" onclick="cancelIntervention('<%= intervention.id %>')" title="Annuler">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Modales d'assignation -->
+<% interventions.forEach(intervention => { %>
+    <% if (!intervention.technicien_id) { %>
+        <div class="modal fade" id="assignModal<%= intervention.id %>" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            <i class="fas fa-user-plus me-2"></i>Assigner un technicien
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="POST" action="/admin/interventions/<%= intervention.id %>/attribuer">
+                        <div class="modal-body">
+                            <div class="alert alert-info">
+                                <strong>Intervention:</strong> <%= intervention.titre %>
+                            </div>
+                            <div class="mb-3">
+                                <label for="technicien_id_<%= intervention.id %>" class="form-label">Technicien *</label>
+                                <select class="form-select" id="technicien_id_<%= intervention.id %>" name="technicien_id" required>
+                                    <option value="">Sélectionner un technicien</option>
+                                    <% if (typeof techniciens !== 'undefined') { %>
+                                        <% techniciens.forEach(technicien => { %>
+                                            <option value="<%= technicien.id %>"><%= technicien.nom %></option>
+                                        <% }) %>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i>Annuler
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check me-1"></i>Assigner
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } %>
+<% }) %>
+
+<script>
+function cancelIntervention(interventionId) {
+    if (confirm('Êtes-vous sûr de vouloir annuler cette intervention ?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/interventions/${interventionId}/annuler`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Filtres
+document.getElementById('statusFilter').addEventListener('change', applyFilters);
+document.getElementById('prioriteFilter').addEventListener('change', applyFilters);
+document.getElementById('technicienFilter').addEventListener('change', applyFilters);
+
+function applyFilters() {
+    const status = document.getElementById('statusFilter').value;
+    const priorite = document.getElementById('prioriteFilter').value;
+    const technicien = document.getElementById('technicienFilter').value;
+    
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        const statusCell = row.querySelector('.status-badge');
+        const prioriteCell = row.querySelector('[class*="priority-"]');
+        const technicienCell = row.querySelector('td:nth-child(5)');
+        
+        if (!statusCell || !prioriteCell || !technicienCell) return;
+        
+        const statusText = statusCell.textContent.toLowerCase().replace(' ', '_');
+        const prioriteText = prioriteCell.className.split('priority-')[1]?.split(' ')[0];
+        const technicienText = technicienCell.textContent.trim();
+        
+        const showStatus = !status || statusText === status;
+        const showPriorite = !priorite || prioriteText === priorite;
+        const showTechnicien = !technicien || 
+                              (technicien === 'non_assigne' && technicienText.includes('Non assigné')) ||
+                              technicienText.includes(technicien);
+        
+        row.style.display = showStatus && showPriorite && showTechnicien ? '' : 'none';
+    });
+}
+
+function resetFilters() {
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('prioriteFilter').value = '';
+    document.getElementById('technicienFilter').value = '';
+    applyFilters();
+}
+</script>

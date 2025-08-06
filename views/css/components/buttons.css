@@ -1,0 +1,125 @@
+/* styles.css */
+
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #343a40;
+}
+
+/* Styles pour les cartes */
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Styles pour les tableaux */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+.table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+/* Styles pour les badges */
+.badge {
+    font-size: 0.8em;
+}
+
+/* Styles pour les boutons */
+.btn {
+    border-radius: 0.25rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Styles pour les alertes */
+.alert {
+    border-radius: 0.25rem;
+}
+
+/* Styles pour les modales */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+/* Styles pour les priorités */
+.priority-basse {
+    color: #6c757d;
+}
+
+.priority-normale {
+    color: #198754;
+}
+
+.priority-haute {
+    color: #ffc107;
+}
+
+.priority-urgente {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Styles pour la sidebar */
+.sidebar {
+    background: #343a40;
+    min-height: 100vh;
+    position: fixed;
+    width: 250px;
+}
+
+.sidebar .nav-link {
+    color: #fff !important;
+}
+
+.sidebar .nav-link:hover {
+    background: #495057;
+}

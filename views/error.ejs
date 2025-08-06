@@ -1,0 +1,9 @@
+<%- layout('layout') %>
+<div class="container mt-5">
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Erreur</h4>
+        <p><%= error || 'Une erreur est survenue.' %></p>
+        <hr>
+        <a href="/admin/dashboard" class="btn btn-primary">Retour au tableau de bord</a>
+    </div>
+</div>

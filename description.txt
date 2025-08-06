@@ -1,0 +1,45 @@
+🎯 Application complète avec :
+Architecture technique
+
+Backend : Node.js + Express.js
+Base de données : PostgreSQL + Sequelize ORM
+Frontend : EJS + Bootstrap 5 + Font Awesome
+Sécurité : bcryptjs + sessions sécurisées
+
+Fonctionnalités Administrateur
+
+Dashboard avec statistiques en temps réel
+Création et gestion des interventions
+Attribution des tâches aux techniciens
+Gestion des techniciens et clients
+Vue d'ensemble complète
+
+Fonctionnalités Technicien
+
+Dashboard personnel avec ses interventions
+Mise à jour du statut des interventions
+Rédaction des rapports (problème trouvé, intervention effectuée)
+Gestion des commentaires et suivi
+
+Caractéristiques professionnelles
+
+✅ Interface responsive et moderne
+✅ Gestion des rôles et permissions
+✅ Données de test intégrées
+✅ Script d'initialisation automatique
+✅ Documentation complète
+✅ Configuration Docker incluse
+✅ Prêt pour la production
+
+🚀 Démarrage rapide
+
+Créer les dossiers et fichiers selon la structure fournie
+Installer PostgreSQL (local ou Docker)
+Exécuter : npm install
+Initialiser : node scripts/init.js
+Démarrer : npm start
+
+👥 Comptes de test inclus
+
+Admin : admin@test.com / admin123
+Technicien : tech@test.com / tech123

@@ -1,0 +1,166 @@
+<!-- VIEWS/TECHNICIEN/INTERVENTION-DETAIL.EJS -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Intervention #<%= intervention.id %> - <%= intervention.titre %></h5>
+                <% let statusClass = intervention.status === 'en_attente' ? 'warning' : 
+                                   intervention.status === 'en_cours' ? 'info' : 
+                                   intervention.status === 'terminee' ? 'success' : 'secondary' %>
+                <span class="badge bg-<%= statusClass %>">
+                    <%= intervention.status.replace('_', ' ').toUpperCase() %>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Client:</strong> <%= intervention.client.nom %><br>
+                        <% if (intervention.client.email) { %>
+                            <strong>Email:</strong> <%= intervention.client.email %><br>
+                        <% } %>
+                        <% if (intervention.client.telephone) { %>
+                            <strong>Téléphone:</strong> <%= intervention.client.telephone %><br>
+                        <% } %>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Priorité:</strong> 
+                        <span class="priority-<%= intervention.priorite %>">
+                            <%= intervention.priorite.toUpperCase() %>
+                        </span><br>
+                        <strong>Date création:</strong> <%= new Date(intervention.createdAt).toLocaleString('fr-FR') %>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Description:</strong>
+                    <p class="mt-2"><%= intervention.description %></p>
+                </div>
+                
+                <% if (intervention.status !== 'terminee') { %>
+                    <form method="POST" action="/technicien/interventions/<%= intervention.id %>/update">
+                        <div class="mb-3">
+                            <label for="probleme_trouve" class="form-label">Problème trouvé</label>
+                            <textarea class="form-control" id="probleme_trouve" name="probleme_trouve" 
+                                      rows="3"><%= intervention.probleme_trouve || '' %></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="intervention_effectuee" class="form-label">Intervention effectuée</label>
+                            <textarea class="form-control" id="intervention_effectuee" name="intervention_effectuee" 
+                                      rows="3"><%= intervention.intervention_effectuee || '' %></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="commentaires" class="form-label">Commentaires</label>
+                            <textarea class="form-control" id="commentaires" name="commentaires" 
+                                      rows="2"><%= intervention.commentaires || '' %></textarea>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <% if (intervention.status === 'en_attente') { %>
+                                <button type="button" class="btn btn-info" onclick="startIntervention()">
+                                    <i class="fas fa-play"></i> Commencer l'intervention
+                                </button>
+                            <% } %>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Sauvegarder
+                            </button>
+                            
+                            <% if (intervention.status === 'en_cours') { %>
+                                <button type="button" class="btn btn-success" onclick="finishIntervention()">
+                                    <i class="fas fa-check"></i> Terminer l'intervention
+                                </button>
+                            <% } %>
+                        </div>
+                    </form>
+                <% } else { %>
+                    <div class="alert alert-success">
+                        <h6>Intervention terminée</h6>
+                        <% if (intervention.probleme_trouve) { %>
+                            <strong>Problème trouvé:</strong> <%= intervention.probleme_trouve %><br>
+                        <% } %>
+                        <% if (intervention.intervention_effectuee) { %>
+                            <strong>Intervention effectuée:</strong> <%= intervention.intervention_effectuee %><br>
+                        <% } %>
+                        <% if (intervention.commentaires) { %>
+                            <strong>Commentaires:</strong> <%= intervention.commentaires %>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6>Informations</h6>
+            </div>
+            <div class="card-body">
+                <% if (intervention.date_debut) { %>
+                    <strong>Début:</strong> <%= new Date(intervention.date_debut).toLocaleString('fr-FR') %><br>
+                <% } %>
+                <% if (intervention.date_fin) { %>
+                    <strong>Fin:</strong> <%= new Date(intervention.date_fin).toLocaleString('fr-FR') %><br>
+                <% } %>
+                <% if (intervention.date_prevue) { %>
+                    <strong>Date prévue:</strong> <%= new Date(intervention.date_prevue).toLocaleString('fr-FR') %>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6>Client</h6>
+            </div>
+            <div class="card-body">
+                <strong><%= intervention.client.nom %></strong><br>
+                <% if (intervention.client.adresse) { %>
+                    <small class="text-muted"><%= intervention.client.adresse %></small>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function startIntervention() {
+    if (confirm('Êtes-vous sûr de vouloir commencer cette intervention ?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/technicien/interventions/<%= intervention.id %>/commencer';
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+function finishIntervention() {
+    const probleme = document.getElementById('probleme_trouve').value;
+    const interventionText = document.getElementById('intervention_effectuee').value;
+    
+    if (!probleme.trim() || !interventionText.trim()) {
+        alert('Veuillez remplir au minimum les champs "Problème trouvé" et "Intervention effectuée" avant de terminer.');
+        return;
+    }
+    
+    if (confirm('Êtes-vous sûr de vouloir terminer cette intervention ? Cette action est définitive.')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/technicien/interventions/<%= intervention.id %>/terminer';
+        
+        // Ajouter les données du formulaire
+        const fields = ['probleme_trouve', 'intervention_effectuee', 'commentaires'];
+        fields.forEach(field => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = field;
+            input.value = document.getElementById(field).value;
+            form.appendChild(input);
+        });
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>

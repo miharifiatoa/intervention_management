@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Intervention #<%= intervention.id %> - <%= intervention.titre %></h5>
+                <% let statusClass = intervention.status === 'en_attente' ? 'warning' : 
+                                   intervention.status === 'en_cours' ? 'info' : 
+                                   intervention.status === 'terminee' ? 'success' : 'secondary' %>
+                <span class="badge bg-<%= statusClass %>">
+                    <%= intervention.status.replace('_', ' ').toUpperCase() %>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Client:</strong> <%= intervention.client.nom %><br>
+                        <% if (intervention.client.email) { %>
+                            <strong>Email:</strong> <%= intervention.client.email %><br>
+                        <% } %>
+                        <% if (intervention.client.telephone) { %>
+                            <strong>Téléphone:</strong> <%= intervention.client.telephone %><br>
+                        <% } %>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Priorité:</strong> 
+                        <span class="priority-<%= intervention.priorite %>">
+                            <%= intervention.priorite.toUpperCase() %>
+                        </span><br>
+                        <strong>Date création:</strong> <%= new Date(intervention.createdAt).toLocaleString('fr-FR') %>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Description:</strong>
+                    <p class="mt-2"><%= intervention.description %></p>
+                </div>
+                
+                <% if (intervention.probleme_trouve) { %>
+                    <div class="mb-3">
+                        <strong>Problème trouvé:</strong>
+                        <p class="mt-2"><%= intervention.probleme_trouve %></p>
+                    </div>
+                <% } %>
+                <% if (intervention.intervention_effectuee) { %>
+                    <div class="mb-3">
+                        <strong>Intervention effectuée:</strong>
+                        <p class="mt-2"><%= intervention.intervention_effectuee %></p>
+                    </div>
+                <% } %>
+                <% if (intervention.commentaires) { %>
+                    <div class="mb-3">
+                        <strong>Commentaires:</strong>
+                        <p class="mt-2"><%= intervention.commentaires %></p>
+                    </div>
+                <% } %>
+                
+                <a href="/admin/interventions" class="btn btn-secondary">Retour</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6>Informations</h6>
+            </div>
+            <div class="card-body">
+                <% if (intervention.date_debut) { %>
+                    <strong>Début:</strong> <%= new Date(intervention.date_debut).toLocaleString('fr-FR') %><br>
+                <% } %>
+                <% if (intervention.date_fin) { %>
+                    <strong>Fin:</strong> <%= new Date(intervention.date_fin).toLocaleString('fr-FR') %><br>
+                <% } %>
+                <% if (intervention.date_prevue) { %>
+                    <strong>Date prévue:</strong> <%= new Date(intervention.date_prevue).toLocaleString('fr-FR') %>
+                <% } %>
+                <% if (intervention.technicien) { %>
+                    <strong>Technicien:</strong> <%= intervention.technicien.nom %>
+                <% } else { %>
+                    <strong>Technicien:</strong> Non assigné
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6>Client</h6>
+            </div>
+            <div class="card-body">
+                <strong><%= intervention.client.nom %></strong><br>
+                <% if (intervention.client.adresse) { %>
+                    <small class="text-muted"><%= intervention.client.adresse %></small>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>

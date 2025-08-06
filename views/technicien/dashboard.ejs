@@ -1,0 +1,98 @@
+<!-- VIEWS/TECHNICIEN/DASHBOARD.EJS -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3><%= stats.total %></h3>
+                        <p>Total Interventions</p>
+                    </div>
+                    <i class="fas fa-clipboard-list fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3><%= stats.enCours %></h3>
+                        <p>En Cours</p>
+                    </div>
+                    <i class="fas fa-cog fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3><%= stats.terminees %></h3>
+                        <p>Terminées</p>
+                    </div>
+                    <i class="fas fa-check-circle fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Mes Interventions</h5>
+    </div>
+    <div class="card-body">
+        <% if (interventions.length === 0) { %>
+            <p class="text-muted">Aucune intervention assignée.</p>
+        <% } else { %>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>Client</th>
+                            <th>Status</th>
+                            <th>Priorité</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% interventions.forEach(intervention => { %>
+                            <tr>
+                                <td>#<%= intervention.id %></td>
+                                <td><%= intervention.titre %></td>
+                                <td><%= intervention.client ? intervention.client.nom : 'N/A' %></td>
+                                <td>
+                                    <% let statusClass = intervention.status === 'en_attente' ? 'warning' : 
+                                                       intervention.status === 'en_cours' ? 'info' : 
+                                                       intervention.status === 'terminee' ? 'success' : 'secondary' %>
+                                    <span class="badge bg-<%= statusClass %> status-badge">
+                                        <%= intervention.status.replace('_', ' ').toUpperCase() %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="priority-<%= intervention.priorite %>">
+                                        <%= intervention.priorite.toUpperCase() %>
+                                    </span>
+                                </td>
+                                <td><%= new Date(intervention.createdAt).toLocaleDateString('fr-FR') %></td>
+                                <td>
+                                    <a href="/technicien/interventions/<%= intervention.id %>" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> Voir
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+
+/*
+ * Main Content Area Styles
+ */
+
+.content {
+    flex-grow: 1; /* Allows the content to take up the remaining horizontal space */
+    padding: 2rem;
+    overflow-y: auto; /* Enables scrolling ONLY within the content area if it overflows */
+    background-color: #f8f9fa;
+}
+
+/*
+ * Responsive Layout Adjustments
+ */
+
+/* For tablets and smaller devices (e.g., < 992px) */
+@media (max-width: 992px) {
+    /* The main flex container from layout.ejs needs to stack vertically */
+    body > .d-flex {
+        flex-direction: column;
+        height: auto; /* Allow height to be determined by content */
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto; /* Reset height for horizontal layout */
+        overflow-y: visible; /* Disable sidebar-only scroll */
+        flex-shrink: 1;
+    }
+
+    /* Make the sidebar navigation horizontal on smaller screens */
+    .sidebar .nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .sidebar .nav-item {
+        flex: 1 1 auto; /* Allow items to grow and shrink */
+        text-align: center;
+    }
+
+    .content {
+        padding: 1.5rem;
+    }
+}
+
+/* For mobile phones (e.g., < 576px) */
+@media (max-width: 576px) {
+    .content {
+        padding: 1rem;
+    }
+
+    /* Stack sidebar items to be more readable on very small screens */
+    .sidebar .nav {
+        flex-direction: column;
+    }
+}

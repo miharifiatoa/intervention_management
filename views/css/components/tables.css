@@ -1,0 +1,121 @@
+/* styles.css */
+
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #343a40;
+}
+
+/* Styles de la carte */
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    background-color: #ffffff;
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+/* Tableaux */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.8em;
+}
+
+/* Boutons */
+.btn {
+    border-radius: 0.25rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Alertes */
+.alert {
+    border-radius: 0.25rem;
+}
+
+/* Priorités */
+.priority-basse {
+    color: #6c757d;
+}
+
+.priority-normale {
+    color: #198754;
+}
+
+.priority-haute {
+    color: #ffc107;
+}
+
+.priority-urgente {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Styles de la sidebar */
+.sidebar {
+    background: #343a40;
+    min-height: 100vh;
+    position: fixed;
+    width: 250px;
+}
+
+.sidebar .nav-link {
+    color: #fff !important;
+}
+
+.sidebar .nav-link:hover {
+    background: #495057;
+}
+
+/* Styles de la zone de contenu */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+    }
+    .content {
+        margin-left: 0;
+    }
+}
