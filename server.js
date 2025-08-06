@@ -10,6 +10,7 @@ import authRoutes from './routes/auth.js';
 import adminRoutes from './routes/admin.js';
 import technicienRoutes from './routes/technicien.js';
 import { setLocals, requireAuth, requireAdmin } from './middleware/auth.js';
+import { User } from './models/index.js';
 
 // Get directory name in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -79,16 +80,23 @@ async function startServer() {
     await sequelize.authenticate();
     console.log('✅ Connexion à la base de données réussie.');
 
+    // Synchroniser les modèles sans recréer les tables
     await sequelize.sync();
     console.log('✅ Synchronisation des modèles terminée.');
 
     await sessionStore.sync();
     console.log('✅ Synchronisation du store de sessions terminée.');
 
+    // Vérifier si l'admin existe
     if (process.env.NODE_ENV !== 'production') {
-      const { initializeDatabase } = await import('./scripts/init.js');
-      await initializeDatabase();
-      console.log('✅ Données de test initialisées.');
+      const adminExists = await User.findOne({ where: { email: 'admin@techzone.com' } });
+      if (!adminExists) {
+        const { initializeDatabase } = await import('./scripts/init.js');
+        await initializeDatabase();
+        console.log('✅ Données de test initialisées.');
+      } else {
+        console.log('ℹ️ Admin déjà présent, initialisation ignorée.');
+      }
     }
 
     app.listen(PORT, () => {
